@@ -4,15 +4,14 @@ services:
   mailserver:
     build:
       args:
-        user: lachlan
-        uid: 1000
-        domain: $MAIL_DOMAIN
+        user: ${MAIL_USER}
+        uid: ${MAIL_USER_UID}
       context: .
-      dockerfile: ./docker/mailserver/Dockerfile.application
+      dockerfile: ./Dockerfile.mailserver
     container_name: mailserver
     restart: unless-stopped
     volumes:
-      - ./:/home/lachlan/mail
+      - ./:/home/${MAIL_USER}/mail
     networks:
       - mailserver-network
     env_file: .env
@@ -20,7 +19,7 @@ services:
       - MAIL_USER
       - MAIL_PASSWORD
       - MAIL_HOST
-
+      - MAIL_DOMAIN
 networks:
   mailserver-network:
     driver: bridge
